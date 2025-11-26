@@ -31,7 +31,7 @@ jobs:
       - name: Connect & Pull Latest Code
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: http://13.233.91.34/
+          host: 13.233.91.34
           username: root
           key_path: ./private_key
           port: 22

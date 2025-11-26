@@ -1,0 +1,24 @@
+name: Deploy on AWS EC2 Backend Server
+ 
+on:
+  push:
+    branches:
+      - main
+ 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: 🔐 Connect & Pull Latest Code
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: 13.233.91.34
+          username: root
+          script: |
+            curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+            apt-get install -y nodejs
+            npm install -g pnpm pm2
+            ls -la
+            cd XpertAI 
+            git pull origin main

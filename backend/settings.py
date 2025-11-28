@@ -15,13 +15,20 @@ SECRET_KEY = config(
 )
 
 # Load DEBUG from .env file
-DEBUG = config("DEBUG", default=False, cast=bool) 
+DEBUG = True 
 
 # --- OPENAI API KEY (ADDED HERE) ---
 OPENAI_API_KEY = config("OPENAI_API_KEY", default=None) 
 
 # --- ALLOWED HOSTS (UPDATED FOR PRODUCTION/VERCEL) ---
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [ '3.110.26.126', '3.108.252.40',  'localhost', '127.0.0.1', ]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://3.110.26.126',
+    'http://3.108.252.40:8000',
+    'http://localhost:3000',
+    'http://127.0.0.1:8000',
+]
 
 # -----------------------------
 # INSTALLED APPS
@@ -67,6 +74,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "backend.middleware.ConditionalCoopMiddleware",
 ]
 
 ROOT_URLCONF = "backend.urls"
@@ -147,7 +155,7 @@ REST_FRAMEWORK = {
 # CORS SETTINGS
 # -----------------------------
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+    "http://3.110.26.126:3000",
 ]
 CORS_ALLOW_CREDENTIALS = True
 
@@ -209,7 +217,7 @@ JAZZMIN_SETTINGS = {
     # UI Customization
     "topmenu_links": [
         {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
-        {"name": "View Website", "url": "http://localhost:3000", "new_window": True},
+        {"name": "View Website", "url": "http://3.110.26.126:3000", "new_window": True},
     ],
     "show_sidebar": True,
     "navigation_expanded": True,

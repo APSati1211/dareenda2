@@ -45,6 +45,7 @@ router.register(r'apply', JobApplicationViewSet)
 
 
 urlpatterns = [
+    path("", home_page_content),
     path("admin/", admin.site.urls),
     
     # Router URLs (Isme ab saare viewsets registered hain)

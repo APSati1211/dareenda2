@@ -1,5 +1,3 @@
-# backend/urls.py
-
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -19,7 +17,7 @@ from blog.views import BlogPostViewSet, BlogCategoryViewSet
 from leads.views import LeadViewSet, NewsletterSubscriberViewSet, chat_flow_handler
 from contact.views import ContactViewSet
 from careers.views import JobOpeningViewSet, JobApplicationViewSet
-from stakeholders.views import StakeholderViewSet
+from stakeholders.views import StakeholderViewSet 
 
 # --- ROUTER REGISTRATION ---
 router = DefaultRouter()
@@ -45,11 +43,10 @@ router.register(r'jobs', JobOpeningViewSet)
 router.register(r'apply', JobApplicationViewSet)
 
 # Stakeholders Endpoint
-router.register(r'stakeholders', StakeholderViewSet)
+router.register(r'stakeholders', StakeholderViewSet) 
 
 
 urlpatterns = [
-    path("", home_page_content),
     path("admin/", admin.site.urls),
     
     # Router URLs (Isme ab saare viewsets registered hain)
@@ -61,14 +58,13 @@ urlpatterns = [
     
     # Theme URLs
     path("api/", include("theme.urls")),
-
-
-    # --- NEW: Custom Pages URLs ---
+    
+    # --- CUSTOM PAGES URLs ---
     path("api/", include("homepage.urls")),       # Home Page Data
     path("api/", include("resources_page.urls")), # Resources Page Data
     path("api/", include("lead_system_page.urls")), # Lead System Page Data
-    path("api/legal/", include("legal.urls")), # <--- NEW URL
-     path("api/", include("services_page.urls")), # Services Page Data
+    path("api/legal/", include("legal.urls")),    # Legal Page Data
+    path("api/", include("services_page.urls")),  # Services Page Data
 ]
 
 if settings.DEBUG:

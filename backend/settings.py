@@ -58,10 +58,10 @@ INSTALLED_APPS = [
     "pages",
     "careers",
     'stakeholders',
-    'homepage',
+    'homepage',     # <--- ALREADY ADDED (GOOD)
     'resources_page',
     'lead_system_page',
-    'legal',  # <--- NEW APP
+    'legal',      # <--- NEW APP
     'services_page', # <--- NEW APP
 ]
 
@@ -251,6 +251,23 @@ JAZZMIN_SETTINGS = {
         "leads.ChatbotLead": "fas fa-robot",
         "contact.ContactMessage": "fas fa-paper-plane",
         "blog.BlogPost": "fas fa-newspaper",
+        # New Apps Icons
+        "homepage.HeroSection": "fas fa-image",
+        "homepage.Stat": "fas fa-chart-bar",
+        "homepage.Feature": "fas fa-star",
+        "homepage.BottomCTA": "fas fa-bullhorn",
+        "resources_page.ResourcesHero": "fas fa-image",
+        "resources_page.SectionTitles": "fas fa-heading",
+        "resources_page.CaseStudy": "fas fa-book-open",
+        "resources_page.DownloadableResource": "fas fa-file-download",
+        "lead_system_page.LSHero": "fas fa-image",
+        "lead_system_page.LSFeature": "fas fa-list",
+        "lead_system_page.LSDashboard": "fas fa-tachometer-alt",
+        "lead_system_page.LSBottomCTA": "fas fa-bullhorn",
+        "services_page.ServiceHero": "fas fa-image",
+        "services_page.ServiceCTA": "fas fa-bullhorn",
+        "stakeholders.Stakeholder": "fas fa-users",
+        "legal.LegalPage": "fas fa-balance-scale",
     },
     
     "default_icon_parents": "fas fa-chevron-circle-right",

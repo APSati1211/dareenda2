@@ -28,6 +28,6 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8000
 
 # Entrypoint: update this as needed for your project!
-CMD ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:8000"]
 
 # If your main app is NOT in core.wsgi, replace core with your Django project's main module name.

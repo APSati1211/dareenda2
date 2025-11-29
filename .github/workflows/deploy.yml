@@ -14,17 +14,18 @@ jobs:
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build Docker Image
-        run: docker build -t akshaykumar0007/cms-frontend .
+        run: docker build -t akshaykumar0007/cms-backend .
       - name: Publish image to docker hub
-        run: docker push akshaykumar0007/cms-frontend:latest   
+        run: docker push akshaykumar0007/cms-backend:latest   
 
   deploy: 
     needs: build
     runs-on: self-hosted    
     steps:
       - name: Pull image from docker hub
-        run: docker pull akshaykumar0007/cms-frontend:latest
+        run: docker pull akshaykumar0007/cms-backend:latest
       - name: Delete Old Container
-        run: docker rm -f reactContainer
+        run: docker rm -f BackendContainer
+        run: docker rm $(docker ps -aq)
       - name: Run docker container
-        run: docker run -d -p 3000:80 --name reactContainer akshaykumar0007/cms-frontend   
+        run: docker run -d -p 3000:80 --name BackendContainer akshaykumar0007/cms-backend   

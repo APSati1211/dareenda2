@@ -15,7 +15,7 @@ SECRET_KEY = config(
 )
 
 # Load DEBUG from .env file
-DEBUG = True 
+DEBUG =  
 
 # --- OPENAI API KEY ---
 OPENAI_API_KEY = config("OPENAI_API_KEY", default=None) 
@@ -23,10 +23,10 @@ OPENAI_API_KEY = config("OPENAI_API_KEY", default=None)
 # --- ALLOWED HOSTS ---
 # Yahan Backend ki IP (13.233.91.34) add ki hai
 ALLOWED_HOSTS = [
-    "15.206.207.118",
-    "3.110.26.126", 
-    "127.0.0.1", 
-    "localhost",
+    " ",
+    " ", 
+    " ", 
+    " ",
     "*"
 ]
 
@@ -158,21 +158,21 @@ REST_FRAMEWORK = {
 # CORS & CSRF SETTINGS (UPDATED WITH NEW IPs)
 # -----------------------------
 CORS_ALLOWED_ORIGINS = [
-    "http://65.0.71.42:3000",   # <--- Frontend Live IP
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://3.110.26.126:3000",
-    "http://15.206.207.118:8000",
+    " ",   # <--- Frontend Live IP
+    " ",
+    " ",
+    " ",
+    " ",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://65.0.71.42:3000",   # <--- Frontend Live IP
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://3.110.26.126:3000",
-    "http://15.206.207.118:8000",
+    " ",   # <--- Frontend Live IP
+    " ",
+    " ",
+    " ",
+    " ",
 ]
 
 # -----------------------------
@@ -225,7 +225,7 @@ JAZZMIN_SETTINGS = {
 
     "topmenu_links": [
         {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
-        {"name": "View Website", "url": "http://3.110.26.126:3000", "new_window": True}, # Updated View Website Link
+        {"name": "View Website", "url": " ", "new_window": True}, # Updated View Website Link
     ],
     "show_sidebar": True,
     "navigation_expanded": True,

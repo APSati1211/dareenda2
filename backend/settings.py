@@ -1,63 +1,60 @@
 from pathlib import Path
 import os
-from decouple import config, Csv  # <--- Csv import zaroori hai
-import datetime 
+from decouple import config
+import datetime
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # -----------------------------
 # CORE SETTINGS
 # -----------------------------
-# Load SECRET_KEY from .env file, with a secure fallback
-SECRET_KEY = config(
-    "DJANGO_SECRET_KEY", 
-    default="django-insecure-1234567890-your-secret-key"
-)
 
-# Load DEBUG from .env file (Fixed: ab ye boolean cast karega)
+# 1. SECRET KEY (Reads from .env, falls back to insecure if missing)
+SECRET_KEY = config("DJANGO_SECRET_KEY", default="django-insecure-12345")
+
+# 2. DEBUG (Reads from .env, safely converts 'True'/'False' string to Boolean)
+# If .env says DEBUG=True, this becomes Python True. Default is False for safety.
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-# --- OPENAI API KEY ---
-OPENAI_API_KEY = config("OPENAI_API_KEY", default=None) 
+# 3. HELPER FUNCTION: Safely clean lists from .env
+# This fixes the "Origin ' '" error by removing spaces and empty items automatically.
+def parse_env_list(env_var_name, default=""):
+    raw_val = config(env_var_name, default=default)
+    # Split by comma, strip spaces, remove empty strings
+    return [x.strip() for x in raw_val.split(',') if x.strip()]
 
-# --- ALLOWED HOSTS ---
-# .env se comma separated list padhega
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="127.0.0.1,localhost", cast=Csv())
+# 4. ALLOWED HOSTS
+ALLOWED_HOSTS = parse_env_list("ALLOWED_HOSTS", default="localhost,127.0.0.1")
 
-# -----------------------------
-# INSTALLED APPS
-# -----------------------------
+# 5. INSTALLED APPS (Keep your existing list exactly as is)
 INSTALLED_APPS = [
-    'jazzmin', 
-
+    'jazzmin',
     'django.contrib.admin',
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
     # third-party
-    "rest_framework",
-    "corsheaders",
-    "adminsortable2",
-
+    'rest_framework',
+    'corsheaders',
+    'adminsortable2',
     # custom apps
-    "core",
-    "blog",
-    "cms",
-    "contact",
-    "leads",
-    "theme",
-    "pages",
-    "careers",
+    'core',
+    'blog',
+    'cms',
+    'contact',
+    'leads',
+    'theme',
+    'pages',
+    'careers',
     'stakeholders',
     'homepage',
     'resources_page',
     'lead_system_page',
     'legal',
     'services_page',
-    'about',
+    'about.apps.AboutConfig',
 ]
 
 # -----------------------------
@@ -68,7 +65,8 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "backend.middleware.AutomaticThemeMiddleware", # Auto Theme Middleware
+    # --- NEW: Auto Theme Middleware ---
+    "backend.middleware.AutomaticThemeMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -149,13 +147,17 @@ REST_FRAMEWORK = {
 }
 
 # -----------------------------
-# CORS & CSRF SETTINGS
+# CORS & CSRF SETTINGS (UPDATED WITH NEW IPs)
 # -----------------------------
-# .env se URLs ki list padhega (React frontend allow karne ke liye)
-CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", default="http://localhost:3000,http://127.0.0.1:3000", cast=Csv())
+CORS_ALLOWED_ORIGINS = parse_env_list("CORS_ALLOWED_ORIGINS")
+
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="http://localhost:3000,http://127.0.0.1:3000", cast=Csv())
+CSRF_TRUSTED_ORIGINS = parse_env_list("CSRF_TRUSTED_ORIGINS")
+
+# Debugging: Print these to Docker logs so you can verify they loaded
+print(f"DEBUG: ALLOWED_HOSTS loaded: {ALLOWED_HOSTS}")
+print(f"DEBUG: CORS_ORIGINS loaded: {CORS_ALLOWED_ORIGINS}")
 
 # -----------------------------
 # DEFAULT PRIMARY KEY
@@ -207,8 +209,7 @@ JAZZMIN_SETTINGS = {
 
     "topmenu_links": [
         {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
-        # View Website Link ko Localhost par point kiya hai agar .env mein url set nahi hai
-        {"name": "View Website", "url": config("VIEW_SITE_URL", default="http://localhost:3000"), "new_window": True}, 
+        {"name": "View Website", "url": " ", "new_window": True}, # Updated View Website Link
     ],
     "show_sidebar": True,
     "navigation_expanded": True,

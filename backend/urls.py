@@ -17,7 +17,7 @@ from blog.views import BlogPostViewSet, BlogCategoryViewSet
 from leads.views import LeadViewSet, NewsletterSubscriberViewSet, chat_flow_handler
 from contact.views import ContactViewSet
 from careers.views import JobOpeningViewSet, JobApplicationViewSet
-from stakeholders.views import StakeholderViewSet 
+# from stakeholders.views import StakeholderViewSet  <-- Iski ab zarurat nahi yahan
 
 # --- ROUTER REGISTRATION ---
 router = DefaultRouter()
@@ -36,9 +36,6 @@ router.register(r'blog-categories', BlogCategoryViewSet, basename='blog-category
 # Lead & Contact Endpoints
 router.register(r'leads', LeadViewSet, basename='lead')
 router.register(r'subscribers', NewsletterSubscriberViewSet)
-# Note: 'contact' router yahan bhi hai aur contact/urls.py mein bhi ho sakta hai. 
-# Best practice: Yahan se hata sakte hain agar contact.urls mein hai, 
-# par conflict nahi hoga agar dono jagah same viewset hai.
 router.register(r'contact', ContactViewSet, basename='contact')
 
 # Career Endpoints
@@ -46,8 +43,7 @@ router.register(r'jobs', JobOpeningViewSet)
 router.register(r'apply', JobApplicationViewSet)
 
 # Stakeholders Endpoint
-router.register(r'stakeholders', StakeholderViewSet) 
-
+# router.register(r'stakeholders', StakeholderViewSet) <-- YE LINE HATA DI KYUNKI AB YE 'stakeholders.urls' MEIN HAI
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -70,9 +66,10 @@ urlpatterns = [
     path("api/legal/", include("legal.urls")),    
     path("api/", include("services_page.urls")),  
     path('api/', include('careers.urls')),
+    path("api/", include("contact.urls")),
     
-    # --- MISSING LINK ADDED HERE ---
-    path("api/", include("contact.urls")), # <--- Ye line zaroori hai contact-page-data ke liye
+    # --- NEW: Solutions Page Logic included here ---
+    path("api/", include("stakeholders.urls")), # <--- Ye line add karni zaroori thi
 ]
 
 if settings.DEBUG:

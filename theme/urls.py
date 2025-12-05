@@ -1,9 +1,7 @@
-# theme/urls.py
-
 from django.urls import path
 from .views import ThemeSettingDetail
 
 urlpatterns = [
-    # Frontend is endpoint par request karega: /api/theme-settings/
+    # API endpoint ab static data dega
     path('theme-settings/', ThemeSettingDetail.as_view(), name='theme-settings'),
 ]

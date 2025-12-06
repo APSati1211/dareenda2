@@ -18,13 +18,13 @@ class ServicePageDataView(APIView):
         cta = ServiceCTA.objects.first()
         
         return Response({
-            "hero": ServiceHeroSerializer(hero).data if hero else None,
-            "process": ServiceProcessSerializer(ServiceProcess.objects.all(), many=True).data,
-            "features": ServiceFeatureSerializer(ServiceFeature.objects.all(), many=True).data,
-            "testimonials": ServiceTestimonialSerializer(ServiceTestimonial.objects.all(), many=True).data,
-            "faq": ServiceFAQSerializer(ServiceFAQ.objects.all(), many=True).data,
-            "cta": ServiceCTASerializer(cta).data if cta else None,
+            "hero": ServiceHeroSerializer(hero, context={'request': request}).data if hero else None,
+            "process": ServiceProcessSerializer(ServiceProcess.objects.all(), many=True, context={'request': request}).data,
+            "features": ServiceFeatureSerializer(ServiceFeature.objects.all(), many=True, context={'request': request}).data,
+            "testimonials": ServiceTestimonialSerializer(ServiceTestimonial.objects.all(), many=True, context={'request': request}).data,
+            "faq": ServiceFAQSerializer(ServiceFAQ.objects.all(), many=True, context={'request': request}).data,
+            "cta": ServiceCTASerializer(cta, context={'request': request}).data if cta else None,
             
-            # Actual Services List (Dynamic)
-            "services_list": ServiceSerializer(Service.objects.all().order_by('order'), many=True).data
+            # Actual Services List (Dynamic) - Ye wala sabse important hai images ke liye
+            "services_list": ServiceSerializer(Service.objects.all().order_by('order'), many=True, context={'request': request}).data
         })

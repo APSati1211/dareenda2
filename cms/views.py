@@ -30,7 +30,8 @@ class SiteContentViewSet(viewsets.ModelViewSet):
 def home_page_content(request):
     """Returns all the site content for the home page."""
     qs = SiteContent.objects.filter(page="home")
-    serializer = SiteContentSerializer(qs, many=True)
+    # FIX: context={'request': request} added here
+    serializer = SiteContentSerializer(qs, many=True, context={'request': request})
     return Response(serializer.data)
 
 class CaseStudyViewSet(viewsets.ReadOnlyModelViewSet):

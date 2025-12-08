@@ -9,6 +9,29 @@ class ContactMessage(models.Model):
     def __str__(self):
         return f"{self.name} - {self.email}"
 
+class Ticket(models.Model):
+    PRIORITY_CHOICES = [
+        ('low', 'Low'),
+        ('medium', 'Medium'),
+        ('high', 'High'),
+    ]
+    STATUS_CHOICES = [
+        ('open', 'Open'),
+        ('in_progress', 'In Progress'),
+        ('resolved', 'Resolved'),
+    ]
+
+    name = models.CharField(max_length=200)
+    email = models.EmailField()
+    subject = models.CharField(max_length=255)
+    description = models.TextField(help_text="Detailed explanation of the issue")
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='open')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Ticket #{self.id} - {self.subject}"
+
 class ContactPage(models.Model):
     """
     Singleton model for Contact Page static content & Map.

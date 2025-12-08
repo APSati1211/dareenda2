@@ -5,13 +5,19 @@ class Lead(models.Model):
     company = models.CharField(max_length=200, blank=True)
     email = models.EmailField(blank=True)
     phone = models.CharField(max_length=30, blank=True)
-    service = models.CharField(max_length=200, blank=True)
+    
+    # --- Updated Service Fields ---
+    service = models.CharField(max_length=200, blank=True, help_text="Main Service Category")
+    sub_services = models.TextField(blank=True, help_text="Comma-separated list of selected sub-services")
+    timeline = models.CharField(max_length=100, blank=True, help_text="When is the service required?")
+    # ------------------------------
+
     message = models.TextField(blank=True)
     source = models.CharField(max_length=100, blank=True, default="website")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        # Admin mein agar list_display fail ho, toh ye dikhega
+        # Shows Name, Service, and Date in Admin dropdowns
         return f"{self.name} ({self.service}) - {self.created_at.strftime('%Y-%m-%d')}"
 
 class ChatbotLeadManager(models.Manager):

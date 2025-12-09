@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'legal',
     'services_page',
     'about.apps.AboutConfig',
+    'storages', # Required for AWS S3
 ]
 
 # -----------------------------
@@ -128,14 +129,34 @@ USE_I18N = True
 USE_TZ = True
 
 # -----------------------------
-# STATIC & MEDIA FILES
+# STATIC & MEDIA FILES (UPDATED FOR AWS S3)
 # -----------------------------
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles") 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+# Check if AWS variables are present in .env
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID", default=None)
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY", default=None)
+AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME", default=None)
+
+if AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and AWS_STORAGE_BUCKET_NAME:
+    # --- AWS S3 Configuration ---
+    AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME", default="us-east-1")
+    AWS_S3_SIGNATURE_VERSION = 's3v4'
+    AWS_S3_FILE_OVERWRITE = False  # Prevent overwriting files with same name
+    AWS_DEFAULT_ACL = None
+    AWS_S3_VERIFY = True
+
+    # Tell Django to use S3 for Media files
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    
+    # URL that media will be served from
+    MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/'
+else:
+    # --- Local Storage Configuration (Fallback) ---
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # -----------------------------
 # DJANGO REST FRAMEWORK
@@ -147,7 +168,7 @@ REST_FRAMEWORK = {
 }
 
 # -----------------------------
-# CORS & CSRF SETTINGS (UPDATED WITH NEW IPs)
+# CORS & CSRF SETTINGS
 # -----------------------------
 CORS_ALLOWED_ORIGINS = parse_env_list("CORS_ALLOWED_ORIGINS")
 
@@ -155,9 +176,13 @@ CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = parse_env_list("CSRF_TRUSTED_ORIGINS")
 
-# Debugging: Print these to Docker logs so you can verify they loaded
+# Debugging: Print these to logs
 print(f"DEBUG: ALLOWED_HOSTS loaded: {ALLOWED_HOSTS}")
 print(f"DEBUG: CORS_ORIGINS loaded: {CORS_ALLOWED_ORIGINS}")
+if AWS_STORAGE_BUCKET_NAME:
+    print(f"DEBUG: Using AWS S3 Bucket: {AWS_STORAGE_BUCKET_NAME}")
+else:
+    print("DEBUG: Using Local Media Storage")
 
 # -----------------------------
 # DEFAULT PRIMARY KEY
@@ -209,7 +234,7 @@ JAZZMIN_SETTINGS = {
 
     "topmenu_links": [
         {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
-        {"name": "View Website", "url": " ", "new_window": True}, # Updated View Website Link
+        {"name": "View Website", "url": " ", "new_window": True}, 
     ],
     "show_sidebar": True,
     "navigation_expanded": True,

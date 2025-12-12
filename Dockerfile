@@ -19,7 +19,9 @@ RUN pip install --upgrade pip \
 COPY . /app
 
 # collect static files (only if settings allow it during build)
-RUN python manage.py collectstatic --noinput || true
+RUN python manage.py collectstatic --noinput || true \
+   &&  python manage.py makemigrations \
+   &&  python manage.py migarte
 
 EXPOSE 8000
 
